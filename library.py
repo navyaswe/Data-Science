@@ -47,12 +47,12 @@ class CustomMappingTransformer(BaseEstimator, TransformerMixin):
     column_set = set(column_values)  #without the conversion above, the set will fail to have np.nan values where they should be.
     keys_set = set(keys_values)      #this will have np.nan values where they should be so no conversion necessary.
 
-    #now check to see if all keys are contained in column.
+    #check to see if all keys are contained in column.
     keys_not_found = keys_set - column_set
     if keys_not_found:
       print(f"\nWarning: {self.__class__.__name__}[{self.mapping_column}] these mapping keys do not appear in the column: {keys_not_found}\n")
 
-    #now check to see if some keys are absent
+    #check to see if some keys are absent
     keys_absent = column_set -  keys_set
     if keys_absent:
       print(f"\nWarning: {self.__class__.__name__}[{self.mapping_column}] these values in the column do not contain corresponding mapping keys: {keys_absent}\n")
@@ -213,40 +213,6 @@ def find_random_state(features_df, labels, n=200):
   idx = np.array(abs(var - rs_value)).argmin()  #index of the smallest value
   return idx
 
-#random state variables for titanic and customer data sets
-titanic_variance_based_split = 107
-customer_variance_based_split = 113
-
-#Data Wrangling on Titanic data set
-titanic_transformer = Pipeline(steps=[
-    ('map_gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
-    ('map_class', CustomMappingTransformer('Class', {'Crew': 0, 'C3': 1, 'C2': 2, 'C1': 3})),
-    ('target_joined', ce.TargetEncoder(cols=['Joined'],
-                           handle_missing='return_nan', #will use imputer later to fill in
-                           handle_unknown='return_nan'  #will use imputer later to fill in
-    )),
-    ('tukey_age', CustomTukeyTransformer(target_column='Age', fence='outer')),
-    ('tukey_fare', CustomTukeyTransformer(target_column='Fare', fence='outer')),
-    ('scale_age', CustomRobustTransformer('Age')),  #from chapter 5
-    ('scale_fare', CustomRobustTransformer('Fare')),  #from chapter 5
-    ('imputer', KNNImputer(n_neighbors=5, weights="uniform", add_indicator=False))  #from chapter 6
-    ], verbose=True)
-
-#Data Wrangling on the customer data set
-customer_transformer = Pipeline(steps=[
-    ('map_os', CustomMappingTransformer('OS', {'Android': 0, 'iOS': 1})),
-    ('target_isp', ce.TargetEncoder(cols=['ISP'],
-                           handle_missing='return_nan', #will use imputer later to fill in
-                           handle_unknown='return_nan'  #will use imputer later to fill in
-    )),
-    ('map_level', CustomMappingTransformer('Experience Level', {'low': 0, 'medium': 1, 'high':2})),
-    ('map_gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
-    ('tukey_age', CustomTukeyTransformer('Age', 'inner')),  #from chapter 4
-    ('tukey_time spent', CustomTukeyTransformer('Time Spent', 'inner')),  #from chapter 4
-    ('scale_age', CustomRobustTransformer('Age')), #from 5
-    ('scale_time spent', CustomRobustTransformer('Time Spent')), #from 5
-    ('impute', KNNImputer(n_neighbors=5, weights="uniform", add_indicator=False)),
-    ], verbose=True)
 
 
 #def numpy_converter(X, y=None):
@@ -273,11 +239,7 @@ def dataset_setup(original_table, label_column_name, the_transformer, rs, ts=.2)
 
     return X_train_numpy, X_test_numpy, y_train_numpy, y_test_numpy
 
-def titanic_setup(titanic_table, transformer=titanic_transformer, rs=titanic_variance_based_split, ts=.2):
-  return dataset_setup(titanic_table, 'Survived', transformer, rs=rs, ts=ts)
 
-def customer_setup(customer_table, transformer=customer_transformer, rs=customer_variance_based_split, ts=.2):
-  return dataset_setup(customer_table, 'Rating', transformer, rs=rs, ts=ts)
 
 # Function to calculate precison, recall, f1score and accuracy for different thresholds
 def threshold_results(thresh_list, actuals, predicted):
