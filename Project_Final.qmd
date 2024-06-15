@@ -1,0 +1,1994 @@
+---
+title: "NASA: Asteroids Classification and Diameter Prediction"
+author: 
+  - "Anika  Kabir"
+  - "Jou-Chi Huang"
+  - "Navya Swetha Daggubati"
+date: "2024-06-14"
+editor: visual
+theme: cerulean
+highlight: "zenburn"
+colortheme: "dolphin"
+fonttheme: "liberation"
+cache: true
+format: 
+  html:
+    page-layout: full
+    fig-width: 8
+    fig-height: 4
+    code-fold: true
+    toc: true
+    toc_float:
+      collapsed: true
+      toc-expand: true
+      toc-location: right
+      toc-title: Contents
+    number-sections: true
+    anchor-sections: true
+    number-depth: 3
+    df-print: paged
+    smooth-scroll: true
+execute: 
+  enabled: true
+  freeze: auto
+---
+## Overview:
+
+- *Source*: The datasets were created and provided by NASA \[[1](https://www.kaggle.com/datasets/shrutimehta/nasa-asteroids-classification "NEO Dataset from NASA")\] \[[2](https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset "JPL Dataset from NASA")\].
+-   *Purpose*: The datasets aim to help analyze and predict potentially hazardous asteroids and their diameters.
+-   *Collection*: Data was collected from NASA's observations, including detailed information on asteroid properties such as diameter, relative velocity, orbit uncertainty, minimum orbit intersection, eccentricity, and more.
+
+## Datasets:
+
+1.  *NEO (Near-Earth Object) Dataset*: Contains data on various properties of near-Earth asteroids, including their hazard potential [1](https://www.kaggle.com/datasets/shrutimehta/nasa-asteroids-classification "NEO Dataset from NASA").
+2.  *JPL (Jet Propulsion Laboratory) Dataset*: Includes additional detailed measurements and characteristics of asteroids, focusing on their diameters [2](https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset "JPL Dataset from NASA").
+
+## Features
+
+The dataset contains the following features:
+
+### Numerical Features
+
+- *Neo Reference ID*: ID reference for the Near-Earth Object (NEO).
+- *Absolute Magnitude*: Measure of the asteroid's brightness.
+- *Est Dia in KM(min), **Est Dia in KM(max)*: Estimated diameter of the asteroid in kilometers (minimum and maximum).
+- *Est Dia in M(min), **Est Dia in M(max)*: Estimated diameter of the asteroid in meters (minimum and maximum).
+- *Est Dia in Miles(min), **Est Dia in Miles(max)*: Estimated diameter of the asteroid in miles (minimum and maximum).
+- *Est Dia in Feet(min), **Est Dia in Feet(max)*: Estimated diameter of the asteroid in feet (minimum and maximum).
+- *Epoch Date Close Approach*: Epoch time of the closest approach.
+- *Relative Velocity km per sec*: Relative velocity of the asteroid in kilometers per second.
+- *Relative Velocity km per hr*: Relative velocity of the asteroid in kilometers per hour.
+- *Miles per hour*: Relative velocity of the asteroid in miles per hour.
+- *Miss Dist.(Astronomical)*: Measure of the asteroid's closest distance to Earth in astronomical units.
+- *Miss Dist.(lunar)*: Measure of the asteroid's closest distance to Earth in lunar distances.
+- *Miss Dist.(kilometers)*: Measure of the asteroid's closest distance to Earth in kilometers.
+- *Miss Dist.(miles)*: Measure of the asteroid's closest distance to Earth in miles.
+- *Orbit ID*: Identifier for the asteroid's orbit.
+- *Orbit Uncertainty*: Measure of uncertainty in the asteroid's orbit.
+- *Minimum Orbit Intersection*: Minimum distance between the asteroid's orbit and Earth's orbit.
+- *Jupiter Tisserand Invariant*: Invariant parameter related to the asteroid's orbit around Jupiter.
+- *Epoch Osculation*: Epoch time of osculation.
+- *Eccentricity*: Measure of the deviation of the asteroid's orbit from a perfect circle.
+- *Semi Major Axis*: Half of the longest diameter of the elliptical orbit.
+- *Inclination*: Angle between the plane of the asteroid's orbit and the ecliptic plane.
+- *Asc Node Longitude*: Longitude of the ascending node.
+- *Orbital Period*: Time taken for the asteroid to complete one orbit around its orbiting body.
+- *Perihelion Distance*: Closest distance between the asteroid and the Sun during its orbit.
+- *Perihelion Arg*: Argument of the perihelion.
+- *Aphelion Dist*: Farthest distance between the asteroid and the Sun during its orbit.
+- *Perihelion Time*: Time at which the asteroid reaches its perihelion.
+- *Mean Anomaly*: Anomaly in the mean longitude of the asteroid.
+- *Mean Motion*: Mean angular motion of the asteroid.
+
+### Categorical Features
+
+- *Name*: Name of the asteroid.
+- *Close Approach Date*: Date of the asteroid's closest approach to Earth.
+- *Orbiting Body*: Celestial body around which the asteroid orbits.
+- *Orbit Determination Date*: Date of orbit determination.
+- *Equinox*: Reference for the celestial coordinate system.
+- *Hazardous*: Binary indicator of whether the asteroid is potentially hazardous.
+
+
+## Motivation 
+Our project focuses on leveraging NASA's asteroid datasets to assess the potential hazards posed by asteroids approaching Earth. The primary objective is to utilize machine learning techniques such as correlation analysis, regression, and classification models to predict critical characteristics like asteroid diameter and hazard classification (hazardous vs. non-hazardous). This research is driven by the existing limitations in current asteroid threat mitigation strategies, which predominantly rely on observational methods and occasionally interception attempts. By enhancing predictive accuracy through models such as logistic regression, K-nearest neighbors, XGBoost, and support vector machines, we aim to accurately identify hazardous asteroids and forecast their physical dimensions. These insights are essential for advancing planetary defense strategies and improving our ability to mitigate potential impacts on Earth.Machine learning and Statistical analysis is helpful for visualizing decision boundaries distinguishing dangerous Asteroids, derive conclusions regarding statistical significance and identify relationships between orbital and physical charecteristics. This project also explores additional techniques such as determining feature importance scores, selction of features. Such techniques help determine the impac of different classification models. 
+
+## Introduction to the NASA JPL Dataset
+The task in this dataset involves predicting diameter of an asteroid with Regression models. The motivation for predicting diameter for asteroids stems from the need to improve mitigation of impact caused by asteroids. We use the Open Asteroid Dataset to evaluate our predictions on an asteroid's diameter.
+## Attributes
+We provide the relevant attribibutes from the dataset that were used for the prediction task. This list also contains the response variable 'diameter'.
+
+* semi-major_axis(a): The average distance from the asteroid to the Sun, in astronomical units (AU).
+* eccentricity(e): A measure of how elongated the orbit is.
+* x-y_inclination(i): The tilt of the orbit relative to the solar system's plane, in degrees.
+* longitude_asc_node(om): The angle from a reference point to where the orbit crosses the solar plane, in degrees.
+* argument_perihelion/perihelion_dist(q): The angle from the ascending node to the closest approach to the Sun, in degrees.
+* aphelion_dist(ad): The farthest distance from the Sun, in AU.
+* orbital_period: The time to complete one orbit around the Sun, usually in years.
+* data_arc: The timespan of collected observations, in days.
+* n_obs_used: The number of observations used to determine the orbit.
+* near_earth_obj(neo): Indicates if the asteroid's orbit brings it close to Earth.
+* physically_hazardous_asteroid(pha): Indicates if the asteroid has the potential to come very close to Earth.
+* diameter: The asteroid's average diameter, typically in kilometers.
+* earth_min_orbit_inter_dist(moid): The closest distance between the asteroid's and Earth's orbits, in AU.
+
+```{python}
+import pandas as pd
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.pipeline import Pipeline, FeatureUnion
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+
+# Loading the Dataset for Hazardous Asteroid Classification
+This section contains all the preprocessing steps: handling missing values and scaling.
+
+```{python}
+github_name = 'navyaswe'
+repo_name = 'Data-Science'
+source_file = 'library.py'
+url = f'https://raw.githubusercontent.com/navyaswe/Data-Science/main/library.py'
+!rm $source_file
+!wget $url
+%run -i $source_file
+```
+```{python}
+url = f'https://raw.githubusercontent.com/navyaswe/Data-Science/main/nasa.csv'
+nasa_asteroids = pd.read_csv(url)
+```
+```{python}
+nasa_asteroids.head(10)
+```
+
+```{python}
+len(nasa_asteroids)
+```
+
+
+```{python}
+nasa_asteroids.dtypes
+
+```
+
+
+```{python}
+nasa_trimmed = nasa_asteroids.drop_duplicates(ignore_index=True) # Removes duplicate rows
+len(nasa_trimmed)
+```
+
+```{python}
+nasa_trimmed.isnull().sum() #Checking for null values
+
+```
+
+We import the necessary libraries (matplotlib.pyplot and seaborn) and define functions to visualize the numeric columns of the nasa_trimmed DataFrame. We created histograms, boxplots, and density plots to understand the distribution and identify any potential outliers in the data.The distribution of Absolute Magnitude peaks around 20 but overall it maintains symmetry. Most of the Near-Earth Objects(NEO) have absolute magnitudes of 20. The distribution of Epoch Date Close Approach is uniform. The response variable "diameter" has a skewed distribution, with most NEOs having small diameters. Tissserand Invariant parameter relative to Jupiter,  peaks at low values. This can help analyse the origin of the asteroid in great depth. Similar pattern can be observed in the case of density plots.
+
+```{python}
+numeric_columns = nasa_trimmed.select_dtypes(include=['int64', 'float64']).columns
+
+non_numeric_columns = nasa_trimmed.select_dtypes(exclude=['int64', 'float64']).columns
+
+# Set the drawing style
+sns.set(style="whitegrid")
+
+# Draw histograms
+def plot_histograms(df, columns, bins=30):
+    df[columns].hist(bins=bins, figsize=(20, 15), layout=(len(columns)//3 + 1, 3))
+    plt.subplots_adjust(hspace=0.5, wspace=0.3)
+    plt.show()
+
+# Draw boxplots
+def plot_boxplots(df, columns):
+    plt.figure(figsize=(20, 15))
+    for i, column in enumerate(columns, 1):
+        plt.subplot(len(columns)//3 + 1, 3, i)
+        sns.boxplot(data=df[column])
+        plt.title(column)
+    plt.tight_layout()
+    plt.subplots_adjust(hspace=0.5, wspace=0.3)
+    plt.show()
+
+
+# Draw density
+def plot_density(df, columns):
+    df[columns].plot(kind='density', subplots=True, layout=(len(columns)//3 + 1, 3), sharex=False, figsize=(20, 15))
+    plt.subplots_adjust(hspace=0.5, wspace=0.3)
+    plt.show()
+```
+
+Here some of the quantities expressed in different units were removed. 
+
+```{python}
+#Remove the overlapped columns(different measurements with the same estimated feasure)
+columns_to_drop = ['Est Dia in KM(max)', 'Est Dia in Miles(max)', 'Est Dia in Feet(max)','Est Dia in KM(min)', 'Est Dia in Miles(min)', 'Est Dia in Feet(min)', 'Relative Velocity km per sec', 'Miss Dist.(miles)', 'Miss Dist.(kilometers)', 'Miss Dist.(lunar)', 'Neo Reference ID', 'Name']
+numeric_columns = numeric_columns.drop(columns_to_drop)
+print(len(numeric_columns))
+
+```
+
+```{python}
+plot_histograms(nasa_trimmed, numeric_columns) #plots for original distribution
+```
+
+```{python}
+plot_boxplots(nasa_trimmed, numeric_columns)
+```
+
+
+```{python}
+plot_density(nasa_trimmed, numeric_columns)
+```
+
+This section: 
+*   Utilizes scalers from sklearn.preprocessing.
+*   Defines a dictionary that associates scaler names with their respective objects.
+*  Includes functions to visualize original and scaled data distributions using these scalers.
+*  Enables comparison of data distribution changes post-scaling.
+```{python}
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+
+#Define the scalers
+scalers = {
+    'StandardScaler': StandardScaler(),
+    'MinMaxScaler': MinMaxScaler(),
+    'RobustScaler': RobustScaler()
+}
+
+#Plot the original data distribution
+def plot_original_data(df, columns):
+    df[columns].hist(bins=30, figsize=(20, 15), layout=(len(columns)//3 + 1, 3))
+    plt.suptitle('Original Data Distribution')
+    plt.show()
+
+#Plot the scaled data distribution
+def plot_scaled_data(df, columns, scaler_name, scaler):
+    scaled_data = pd.DataFrame(scaler.fit_transform(df[columns]), columns=columns)
+    scaled_data.hist(bins=30, figsize=(20, 15), layout=(len(columns)//3 + 1, 3))
+    plt.suptitle(f'Scaled Data Distribution using {scaler_name}')
+    plt.show()
+```
+
+Here we note the distribution for the original and scaled numerical columns.
+```{python}
+plot_original_data(nasa_trimmed, numeric_columns)
+```
+
+```{python}
+for scaler_name, scaler in scalers.items():
+  plot_scaled_data(nasa_trimmed, numeric_columns, scaler_name, scaler)
+```
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+```
+Determining the nature of the variable 'Equinox': 
+```{python}
+equinox_counts = nasa_asteroids['Equinox'].value_counts()
+
+plt.figure(figsize=(6, 4))
+equinox_counts.plot(kind='bar')
+plt.title('Distribution of Equinox')
+plt.xlabel('Equinox')
+plt.ylabel('Count')
+plt.xticks(rotation=0)
+plt.show()
+
+```
+
+Oberserving the variable 'Close Approach Date'
+```{python}
+nasa_asteroids['Close Approach Date']
+```
+
+Close Approach Date Distribution by year shows that in 2014 most asteroids were closest to Earth compared to the other years.
+```{python}
+nasa_asteroids['Close Approach Date'] = pd.to_datetime(nasa_asteroids['Close Approach Date'])
+
+# Extract year and month from the date
+nasa_asteroids['Year'] = nasa_asteroids['Close Approach Date'].dt.year
+nasa_asteroids['Month'] = nasa_asteroids['Close Approach Date'].dt.month
+
+plt.figure(figsize=(12, 6))
+sns.countplot(data=nasa_asteroids, x='Year', palette='viridis')
+plt.title('Distribution of Close Approach Dates (by Year)')
+plt.xlabel('Year')
+plt.ylabel('Count')
+plt.xticks(rotation=45)
+plt.show()
+```
+
+```{python}
+nasa_asteroids['Orbiting Body']
+```
+
+This demonstrates that more than 4000 NEO orbited the Earth in total.
+```{python}
+plt.figure(figsize=(8, 6))
+sns.countplot(data=nasa_asteroids, x='Orbiting Body', palette='viridis')
+plt.title('Distribution of Orbiting Body')
+plt.xlabel('Orbiting Body')
+plt.ylabel('Count')
+plt.xticks(rotation=45)
+plt.show()
+```
+Specific Dates on which the object reaches closest to the Earth. 
+
+```{python}
+nasa_asteroids['Orbit Determination Date'].unique()
+```
+
+Each year the number of objects in a particular orbit. By analyzing the date columsn, it can be shown that there were over 4000 NEOs in the Earth's orbit in 2017.
+```{python}
+nasa_asteroids['Orbit Determination Date'] = pd.to_datetime(nasa_asteroids['Orbit Determination Date'])
+
+# Extracts year from the date
+nasa_asteroids['Year'] = nasa_asteroids['Orbit Determination Date'].dt.year
+plt.figure(figsize=(12, 6))
+sns.countplot(data=nasa_asteroids, x='Year', palette='viridis')
+plt.title('Distribution of Orbit Determination Dates (by Year)')
+plt.xlabel('Year')
+plt.ylabel('Count')
+plt.xticks(rotation=45)
+plt.show()
+```
+
+Break out into features and labels
+
+```{python}
+nasa_features = nasa_trimmed.drop(columns='Hazardous')
+labels = nasa_trimmed['Hazardous'].to_list()
+nasa_features
+```
+
+Pipeline
+
+We constructed a pipeline (nasa_transformer) using scikit-learn to streamline data preprocessing for the NASA dataset. This pipeline incorporates several essential transformations:
+
+
+
+*   One-Hot Encoding for converting categorical columns ohe_close_approach_date, ohe_orbit_determination_date, 'ohe_equinox'.
+*   Tukey Transformer for handling outliers and transforming numerical columns.
+
+*   Custom Robust Transformer for scaling numerical data effectively.
+*   KNNImputer for filling in missing values using the k-nearest neighbors approach.
+
+```{python}
+nasa_transformer = Pipeline(steps=[
+    #Categorical Columns
+    ('ohe_close_approach_date', CustomOHETransformer(target_column='Close Approach Date')),
+    ('ohe_orbit_determination_date', CustomOHETransformer(target_column='Orbit Determination Date')),
+    ('ohe_equinox', CustomOHETransformer(target_column='Equinox')),
+
+    #Numerical Columns
+    ('tukey_absolute_magnitude', CustomTukeyTransformer('Absolute Magnitude', 'outer')),
+    ('tukey_est_dia_min', CustomTukeyTransformer('Est Dia in M(min)', 'outer')),
+    ('tukey_est_dia_max', CustomTukeyTransformer('Est Dia in M(max)', 'outer')),
+    ('tukey_epoch_date_close_approach', CustomTukeyTransformer('Epoch Date Close Approach', 'outer')),
+    ('tukey_relative_velocity', CustomTukeyTransformer('Relative Velocity km per hr', 'outer')),
+    ('tukey_miles_per_hour', CustomTukeyTransformer('Miles per hour', 'outer')),
+    ('tukey_miss_dist', CustomTukeyTransformer('Miss Dist.(Astronomical)', 'outer')),
+    ('tukey_orbit_id', CustomTukeyTransformer('Orbit ID', 'outer')),
+    ('tukey_orbit_uncertainty', CustomTukeyTransformer('Orbit Uncertainity', 'outer')),
+    ('tukey_min_orbit_intersection', CustomTukeyTransformer('Minimum Orbit Intersection', 'outer')),
+    ('tukey_jupiter_tisserand', CustomTukeyTransformer('Jupiter Tisserand Invariant', 'outer')),
+    ('tukey_epoch_osculation', CustomTukeyTransformer('Epoch Osculation', 'outer')),
+    ('tukey_eccentricity', CustomTukeyTransformer('Eccentricity', 'outer')),
+    ('tukey_semi_major_axis', CustomTukeyTransformer('Semi Major Axis', 'outer')),
+    ('tukey_inclination', CustomTukeyTransformer('Inclination', 'outer')),
+    ('tukey_asc_node_longitude', CustomTukeyTransformer('Asc Node Longitude', 'outer')),
+    ('tukey_orbital_period', CustomTukeyTransformer('Orbital Period', 'outer')),
+    ('tukey_perihelion_distance', CustomTukeyTransformer('Perihelion Distance', 'outer')),
+    ('tukey_perihelion_arg', CustomTukeyTransformer('Perihelion Arg', 'outer')),
+    ('tukey_aphelion_dist', CustomTukeyTransformer('Aphelion Dist', 'outer')),
+    ('tukey_perihelion_time', CustomTukeyTransformer('Perihelion Time', 'outer')),
+    ('tukey_mean_anomaly', CustomTukeyTransformer('Mean Anomaly', 'outer')),
+    ('tukey_mean_motion', CustomTukeyTransformer('Mean Motion', 'outer')),
+
+    # Scaling
+    ('scale_absolute_magnitude', CustomRobustTransformer('Absolute Magnitude')),
+    ('scale_est_dia_min', CustomRobustTransformer('Est Dia in M(min)')),
+    ('scale_est_dia_max', CustomRobustTransformer('Est Dia in M(max)')),
+    ('scale_epoch_date_close_approach', CustomRobustTransformer('Epoch Date Close Approach')),
+    ('scale_relative_velocity', CustomRobustTransformer('Relative Velocity km per hr')),
+    ('scale_miles_per_hour', CustomRobustTransformer('Miles per hour')),
+    ('scale_miss_dist', CustomRobustTransformer('Miss Dist.(Astronomical)')),
+    ('scale_orbit_id', CustomRobustTransformer('Orbit ID')),
+    ('scale_orbit_uncertainty', CustomRobustTransformer('Orbit Uncertainity')),
+    ('scale_min_orbit_intersection', CustomRobustTransformer('Minimum Orbit Intersection')),
+    ('scale_jupiter_tisserand', CustomRobustTransformer('Jupiter Tisserand Invariant')),
+    ('scale_epoch_osculation', CustomRobustTransformer('Epoch Osculation')),
+    ('scale_eccentricity', CustomRobustTransformer('Eccentricity')),
+    ('scale_semi_major_axis', CustomRobustTransformer('Semi Major Axis')),
+    ('scale_inclination', CustomRobustTransformer('Inclination')),
+    ('scale_asc_node_longitude', CustomRobustTransformer('Asc Node Longitude')),
+    ('scale_orbital_period', CustomRobustTransformer('Orbital Period')),
+    ('scale_perihelion_distance', CustomRobustTransformer('Perihelion Distance')),
+    ('scale_perihelion_arg', CustomRobustTransformer('Perihelion Arg')),
+    ('scale_aphelion_dist', CustomRobustTransformer('Aphelion Dist')),
+    ('scale_perihelion_time', CustomRobustTransformer('Perihelion Time')),
+    ('scale_mean_anomaly', CustomRobustTransformer('Mean Anomaly')),
+    ('scale_mean_motion', CustomRobustTransformer('Mean Motion')),
+
+    # Imputation
+    ('imputer', KNNImputer(n_neighbors=5, weights="uniform", add_indicator=False))
+], verbose=True)
+```
+
+
+## Model Fitting
+
+XG Boost
+
+The implemented XGBoost model demonstrates exceptional performance in this classification task, achieving an accuracy of 99.36%.
+This indicates the model can accurately distinguish between positive and negative cases in the unseen test data.
+XGBoost's strength lies in its ability to handle complex relationships within data using decision trees and leverage gradient boosting for optimization.
+
+**Performance Analysis:**
+
+Precision (0.9732) and Recall (0.9864) provide a balanced view. The model effectively identifies true positives while minimizing false positives and false negatives.
+The F1 score (0.9797) further emphasizes this balance between precision and recall.
+The outstanding AUC of 0.9996 signifies the model's exceptional ability to differentiate between classes, as confirmed by the ROC curve analysis.
+Insights from the ROC Curve
+
+The ROC curve visually reinforces the model's performance. Its proximity to the upper left corner indicates the model excels at classifying positive and negative instances with minimal errors.
+
+**Feature Importance:**
+
+Analysis of the feature importance scores reveals crucial insights into the model's decision-making process.
+Features like Absolute Magnitude and Minimum Orbit Intersection hold the highest importance, suggesting they significantly influence the model's predictions. Other features like Perihelion Time, Perihelion Distance, Inclination, and Orbit Uncertainty also appear to be relatively important, potentially offering valuable information for understanding the model's behavior.
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import xgboost as xgb
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve, auc
+
+nasa_features = nasa_trimmed.drop(columns='Hazardous')
+labels = nasa_trimmed['Hazardous'].to_list()
+non_numeric_cols = nasa_features.select_dtypes(exclude=['int64', 'float64']).columns
+
+
+nasa_features_encoded = pd.get_dummies(nasa_features, columns=non_numeric_cols)
+
+
+X_train, X_test, y_train, y_test = train_test_split(nasa_features_encoded, labels, test_size=0.2, random_state=42)
+
+#Initialize and fit the XGBoost model
+xgb_model = xgb.XGBClassifier(use_label_encoder=False, eval_metric='logloss')
+xgb_model.fit(X_train, y_train)
+
+#Make predictions
+y_pred = xgb_model.predict(X_test)
+y_pred_proba = xgb_model.predict_proba(X_test)[:, 1]
+
+#Calculate metrics
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+auc_score = roc_auc_score(y_test, y_pred_proba)
+
+print(f'Accuracy: {accuracy:.4f}')
+print(f'Precision: {precision:.4f}')
+print(f'Recall: {recall:.4f}')
+print(f'F1 Score: {f1:.4f}')
+print(f'AUC: {auc_score:.4f}')
+
+
+fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+roc_auc = auc(fpr, tpr)
+
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend(loc="lower right")
+plt.show()
+
+#Plot feature importance
+plt.figure(figsize=(10, 8))
+xgb.plot_importance(xgb_model, max_num_features=20)
+plt.title('Feature Importance')
+plt.show()
+```
+
+```{python}
+
+
+#Calculate correlations with the target
+correlations = nasa_features_encoded.corrwith(pd.Series(labels, index=nasa_features_encoded.index))
+correlation_df = pd.DataFrame({'Feature': correlations.index, 'Correlation': correlations.values})
+correlation_df = correlation_df.sort_values(by='Correlation', ascending=False)
+
+
+print("Feature Correlations with the target:")
+print(correlation_df)
+```
+
+Retrain XG Boost with the Two Most Significant Attributes
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import xgboost as xgb
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve, auc
+
+#Select only the two significant attributes
+selected_columns = ['Absolute Magnitude', 'Minimum Orbit Intersection']
+
+
+selected_features = nasa_features[selected_columns]
+
+#Identify and transform non-numeric columns
+non_numeric_cols = selected_features.select_dtypes(include=['object']).columns
+
+selected_features_encoded = pd.get_dummies(selected_features, columns=non_numeric_cols)
+
+# Split the data
+random_state_value = 42
+X_train, X_test, y_train, y_test = train_test_split(selected_features_encoded, labels, test_size=0.2, random_state=random_state_value)
+
+# Standardize the features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Initialize and fit the XGBoost model
+xgb_model = xgb.XGBClassifier(use_label_encoder=False, eval_metric='logloss')
+xgb_model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = xgb_model.predict(X_test)
+y_pred_proba = xgb_model.predict_proba(X_test)[:, 1]
+
+# Calculate and print metrics
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+auc_score = roc_auc_score(y_test, y_pred_proba)
+
+print(f'Accuracy: {accuracy:.4f}')
+print(f'Precision: {precision:.4f}')
+print(f'Recall: {recall:.4f}')
+print(f'F1 Score: {f1:.4f}')
+print(f'AUC: {auc_score:.4f}')
+
+# Plot the ROC curve
+fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+roc_auc = auc(fpr, tpr)
+
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend(loc="lower right")
+plt.show()
+```
+
+
+
+
+
+Analysis:
+
+After extracting and using only two attributes, we found that the evaluation metrics still indicate high accuracy, comparable to using all the attributes. Therefore, it might be more efficient to use 'Absolute Magnitude' and 'Minimum Orbit Intersection' as the training features.
+
+
+
+
+
+
+```{python}
+print(nasa_features)
+```
+
+
+
+Support Vector Machine + Decision Boundary for 'Absolute Magnitude' and 'Minimum Orbit Intersection'
+
+The SVM model utilizes the SVC implementation from sklearn.svm with an 'rbf' kernel, chosen for its ability to handle non-linear relationships in data. Trained on the NASA dataset's training data, the model achieves 85.93% accuracy on unseen test data. It exhibits a precision of 0.7027 and a recall of 0.1769, with an F1 score of 0.2826 and an AUC-ROC of 0.8684, indicating robust classification performance. The 'rbf' kernel allows the SVM to effectively discern complex patterns in high-dimensional datasets, making it suitable for tasks requiring accurate classification and clear decision boundaries. Therefore, we conclude that the relationships between variables in the dataset are non-linear and the decision boundary is very complex and a rbf kernel is suitable for such a prediction task.
+
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve, auc
+
+#Select only two features for visualization purposes
+selected_columns = ['Absolute Magnitude', 'Minimum Orbit Intersection']
+selected_features = nasa_features[selected_columns]
+
+#Split the data
+random_state_value = 42
+X_train, X_test, y_train, y_test = train_test_split(selected_features, labels, test_size=0.2, random_state=random_state_value)
+
+#Standardize the features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+#Initialize and fit the SVM model with RBF kernel and adjusted parameters
+svm_model = SVC(kernel='rbf', C=1.0, gamma='scale', probability=True, random_state=random_state_value)
+svm_model.fit(X_train, y_train)
+
+#Make predictions
+y_pred = svm_model.predict(X_test)
+y_pred_proba = svm_model.predict_proba(X_test)[:, 1]
+
+#Calculate and print metrics
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+auc_score = roc_auc_score(y_test, y_pred_proba)
+
+print(f'Accuracy: {accuracy:.4f}')
+print(f'Precision: {precision:.4f}')
+print(f'Recall: {recall:.4f}')
+print(f'F1 Score: {f1:.4f}')
+print(f'AUC: {auc_score:.4f}')
+
+
+fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+roc_auc = auc(fpr, tpr)
+
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend(loc="lower right")
+plt.show()
+
+# Plotting decision boundaries
+def plot_decision_boundaries(X, y, model, title):
+    # Create a mesh to plot the decision boundary
+    h = .02  # step size in the mesh
+    x_min, x_max = X.iloc[:, 0].min() - 1, X.iloc[:, 0].max() + 1
+    y_min, y_max = X.iloc[:, 1].min() - 1, X.iloc[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+
+    # Plot the decision boundary by assigning a color to each point in the mesh
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
+
+    # Plot also the training points
+    scatter = plt.scatter(X.iloc[:, 0], X.iloc[:, 1], c=y, cmap=plt.cm.coolwarm, edgecolors='k')
+    plt.xlabel('Absolute Magnitude')
+    plt.ylabel('Minimum Orbit Intersection')
+    plt.title(title)
+    plt.legend(handles=scatter.legend_elements()[0], labels=['Non-Hazardous', 'Hazardous'])
+    plt.show()
+
+# Standardize the features for the entire dataset for plotting purposes
+X_all = scaler.fit_transform(nasa_features[selected_columns])
+#print(X_all)
+
+plot_decision_boundaries(X_all, labels, svm_model, "SVM Decision Boundary for Hazardous Classification")
+```
+
+
+```{python}
+print(nasa_features)
+```
+
+
+
+Random Forest
+
+The Random Forest Classifier model achieves an impressive accuracy of 99.04% on the unseen test data, indicating an excellent fit. The precision is 1.0, meaning all positive predictions were correct, and the recall is 0.9388, capturing 93.88% of the actual positive cases. The F1 score is 0.9684, a harmonic mean of precision and recall, further suggesting robust performance. Additionally, the AUC-ROC is 0.9985, demonstrating a very good ability of the model to distinguish between positive and negative classes. The ROC curve confirms these findings, showing a high True Positive Rate (TPR) for most False Positive Rates (FPR). 
+
+```{python}
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve, auc
+import matplotlib.pyplot as plt
+
+# List of columns to drop
+columns_to_drop = ['Est Dia in KM(max)', 'Est Dia in Miles(max)', 'Est Dia in Feet(max)',
+                   'Est Dia in KM(min)', 'Est Dia in Miles(min)', 'Est Dia in Feet(min)',
+                   'Relative Velocity km per sec', 'Miss Dist.(miles)', 'Miss Dist.(kilometers)',
+                   'Miss Dist.(lunar)', 'Neo Reference ID', 'Name', 'Orbiting Body', 'Equinox']
+
+# Drop the specified columns if they exist in the dataframe
+nasa_features = nasa_features.drop(columns=[col for col in columns_to_drop if col in nasa_features.columns])
+
+# Identify and transform non-numeric columns
+non_numeric_cols = nasa_features.select_dtypes(include=['object']).columns
+
+# Ensure columns to drop are in non_numeric_cols
+columns_to_drop = ['Orbiting Body', 'Equinox']
+non_numeric_cols = [col for col in non_numeric_cols if col not in columns_to_drop]
+
+# One-hot encode the non-numeric columns
+nasa_features_encoded = pd.get_dummies(nasa_features, columns=non_numeric_cols)
+
+# Split the data
+random_state_value = 42
+X_train, X_test, y_train, y_test = train_test_split(nasa_features_encoded, labels, test_size=0.2, random_state=random_state_value)
+
+# Standardize the features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Initialize and fit the Random Forest model
+rf_model = RandomForestClassifier(random_state=random_state_value)
+rf_model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = rf_model.predict(X_test)
+y_pred_proba = rf_model.predict_proba(X_test)[:, 1]
+
+# Calculate and print metrics
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+auc_score = roc_auc_score(y_test, y_pred_proba)
+
+print(f'Accuracy: {accuracy:.4f}')
+print(f'Precision: {precision:.4f}')
+print(f'Recall: {recall:.4f}')
+print(f'F1 Score: {f1:.4f}')
+print(f'AUC: {auc_score:.4f}')
+
+# Plot the ROC curve
+fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+roc_auc = auc(fpr, tpr)
+
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend(loc="lower right")
+plt.show()
+
+# Get feature importances from the Random Forest model
+feature_importances = rf_model.feature_importances_
+
+# Create a DataFrame for the feature importances
+features = nasa_features_encoded.columns
+importance_df = pd.DataFrame({'Feature': features, 'Importance': feature_importances})
+importance_df = importance_df.sort_values(by='Importance', ascending=False)
+
+# Select top 20 features for plotting
+top_n = 20
+top_features = importance_df.head(top_n)
+
+# Plot the feature importances
+plt.figure(figsize=(12, 8))
+plt.barh(top_features['Feature'], top_features['Importance'])
+plt.xlabel('Importance')
+plt.ylabel('Feature')
+plt.title('Top 20 Feature Importances from Random Forest')
+plt.gca().invert_yaxis()
+plt.show()
+
+# Calculate correlations with the target
+correlations = nasa_features_encoded.corrwith(pd.Series(labels, index=nasa_features_encoded.index))
+correlation_df = pd.DataFrame({'Feature': correlations.index, 'Correlation': correlations.values})
+correlation_df = correlation_df.sort_values(by='Correlation', ascending=False)
+
+# Display correlations
+print("Feature Correlations with the target:")
+print(correlation_df)
+
+```
+
+Retrain Random Forest with the Five Most Significant Attributes
+
+```{python}
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve, auc
+import matplotlib.pyplot as plt
+
+# Select the attributes to use
+selected_columns = ['Minimum Orbit Intersection', 'Est Dia in M(min)', 'Absolute Magnitude', 'Est Dia in M(max)', 'Inclination']
+
+# Assuming `nasa_features` is your features dataframe and `labels` is your labels dataframe
+selected_features = nasa_features[selected_columns]
+
+# Handle non-numeric columns (if any)
+non_numeric_cols = selected_features.select_dtypes(include=['object']).columns
+selected_features_encoded = pd.get_dummies(selected_features, columns=non_numeric_cols)
+
+# Split the data into training and testing sets
+random_state_value = 42
+X_train, X_test, y_train, y_test = train_test_split(selected_features_encoded, labels, test_size=0.2, random_state=random_state_value)
+
+# Standardize the features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Initialize and train the Random Forest model
+rf_model = RandomForestClassifier(random_state=random_state_value)
+rf_model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = rf_model.predict(X_test)
+y_pred_proba = rf_model.predict_proba(X_test)[:, 1]
+
+# Calculate and print evaluation metrics
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+auc_score = roc_auc_score(y_test, y_pred_proba)
+
+print(f'Accuracy: {accuracy:.4f}')
+print(f'Precision: {precision:.4f}')
+print(f'Recall: {recall:.4f}')
+print(f'F1 Score: {f1:.4f}')
+print(f'AUC: {auc_score:.4f}')
+
+# Plot the ROC curve
+fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+roc_auc = auc(fpr, tpr)
+
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend(loc="lower right")
+plt.show()
+
+```
+
+Anlaysis: Can you use a few selected attributes?
+
+After extracting and using only the five most significant attributes, the model's overall accuracy remains high. Additionally, the evaluation metrics (precision, recall, F1 score, and AUC) indicate strong model performance. This suggests that we can successfully predict whether an asteroid is hazardous using the following attributes: 'Minimum Orbit Intersection', 'Est Dia in M(min)', 'Absolute Magnitude', 'Est Dia in M(max)', and 'Inclination'.
+
+Implement Grid Search with Random Forest
+
+```{python}
+
+import pandas as pd
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve, auc
+import matplotlib.pyplot as plt
+
+#Identify and transform non-numeric columns
+non_numeric_cols = nasa_features.select_dtypes(include=['object']).columns
+
+#Onehot encode the non-numeric columns
+nasa_features_encoded = pd.get_dummies(nasa_features, columns=non_numeric_cols)
+
+#Split the data
+random_state_value = 42
+X_train, X_test, y_train, y_test = train_test_split(nasa_features_encoded, labels, test_size=0.2, random_state=random_state_value)
+
+#Standardize the features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+#Define the parameter grid
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4],
+    'bootstrap': [True, False]
+}
+
+#Initialize the Random Forest model
+rf_model = RandomForestClassifier(random_state=random_state_value)
+
+#Initialize GridSearchCV
+grid_search = GridSearchCV(estimator=rf_model, param_grid=param_grid,
+                           cv=5, n_jobs=-1, scoring='accuracy', verbose=2)
+
+#Fit the model with grid search
+grid_search.fit(X_train, y_train)
+
+#Get the best model
+best_rf_model = grid_search.best_estimator_
+
+#Make predictions
+y_pred = best_rf_model.predict(X_test)
+y_pred_proba = best_rf_model.predict_proba(X_test)[:, 1]
+
+#Calculate and print metrics
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+auc_score = roc_auc_score(y_test, y_pred_proba)
+
+print(f'Best Parameters: {grid_search.best_params_}')
+print(f'Accuracy: {accuracy:.4f}')
+print(f'Precision: {precision:.4f}')
+print(f'Recall: {recall:.4f}')
+print(f'F1 Score: {f1:.4f}')
+print(f'AUC: {auc_score:.4f}')
+
+# Plot the ROC curve
+fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+roc_auc = auc(fpr, tpr)
+
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend(loc="lower right")
+plt.show()
+
+# Print feature importances
+feature_importances = best_rf_model.feature_importances_
+feature_names = nasa_features_encoded.columns
+
+# Create a DataFrame for feature importances
+feature_importance_df = pd.DataFrame({
+    'Feature': feature_names,
+    'Importance': feature_importances
+}).sort_values(by='Importance', ascending=False)
+
+print("Feature importances:")
+print(feature_importance_df)
+
+```
+
+
+# Fitting Logistic Regression Model
+
+```{python}
+import pandas as pd
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
+```
+
+```{python}
+url = f'https://raw.githubusercontent.com/navyaswe/Data-Science/main/nasa.csv'
+nasa_asteroids = pd.read_csv(url)
+```
+
+```{python}
+nasa_trimmed = nasa_asteroids.drop_duplicates(ignore_index=True)
+len(nasa_trimmed)
+```
+
+```{python}
+minmax_columns = ['Est Dia in M(min)', 'Epoch Date Close Approach', 'Est Dia in M(max)', 'Miss Dist.(Astronomical)', 'Orbit ID', 'Minimum Orbit Intersection', 'Epoch Osculation', 'Asc Node Longitude', 'Perihelion Arg','Mean Anomaly', 'Mean Motion']
+standard_columns = ['Absolute Magnitude', 'Relative Velocity km per hr','Miles per hour', 'Orbit Uncertainity', 'Jupiter Tisserand Invariant', 'Eccentricity', 'Inclination', 'Orbital Period', 'Perihelion Distance', 'Aphelion Dist', 'Perihelion Time']
+```
+
+```{python}
+categorical_cols = ['Orbiting Body', 'Orbit Determination Date', 'Equinox']
+```
+
+```{python}
+target = 'Hazardous'  
+features = nasa_trimmed.columns.drop(target)
+```
+```{python}
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, roc_auc_score, log_loss
+import statsmodels.api as sm
+import numpy as np
+```
+
+```{python}
+
+transformers = [
+    ('minmax', MinMaxScaler(), minmax_columns),
+    ('standard', StandardScaler(), standard_columns),
+    ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False), categorical_cols)
+]
+
+preprocessor = ColumnTransformer(transformers)
+X = nasa_trimmed[features]
+y = nasa_trimmed[target].astype(int)
+```
+
+```{python}
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+```
+
+```{python}
+X_train_transformed = preprocessor.fit_transform(X_train)
+X_test_transformed = preprocessor.transform(X_test)
+```
+
+```{python}
+log_reg = LogisticRegression()
+model = log_reg.fit(X_train_transformed, y_train)
+```
+
+```{python}
+y_pred = model.predict(X_test_transformed)
+y_pred_prob = model.predict_proba(X_test_transformed)[:, 1]
+```
+
+```{python}
+accuracy = accuracy_score(y_test, y_pred)
+```
+
+```{python}
+accuracy
+```
+
+```{python}
+roc_auc = roc_auc_score(y_test, y_pred_prob)
+```
+
+```{python}
+logloss = log_loss(y_test, y_pred_prob)
+```
+
+```{python}
+print(classification_report(y_test, y_pred))
+print(confusion_matrix(y_test, y_pred))
+```
+The accuracy after fitting Logistic Regression is 93 per cent.
+
+```{python}
+print(f'Accuracy: {accuracy}')
+print(f'ROC AUC Score: {roc_auc}')
+print(f'Log Loss: {logloss}')
+```
+
+# LR with statsmodel
+
+```{python}
+url = f'https://raw.githubusercontent.com/navyaswe/Data-Science/main/nasa.csv'
+nasa_asteroids = pd.read_csv(url)
+```
+
+```{python}
+nasa_trimmed = nasa_asteroids.drop_duplicates(ignore_index=True)
+len(nasa_trimmed)
+```
+
+```{python}
+nasa_trimmed.head()
+```
+
+```{python}
+nasa_trimmed.fillna(method='ffill', inplace=True)
+```
+```{python}
+nasa_trimmed = pd.get_dummies(nasa_trimmed, columns=['Orbiting Body'], drop_first=True)
+```
+```{python}
+nasa_trimmed = pd.get_dummies(nasa_trimmed, columns=['Equinox'], drop_first=True)
+nasa_trimmed['Hazardous'] = nasa_trimmed['Hazardous'].astype(int)
+y = nasa_trimmed['Hazardous']
+```
+
+```{python}
+nasa_trimmed = nasa_trimmed.drop('Hazardous', axis=1)
+```
+
+```{python}
+nasa_trimmed = nasa_trimmed.drop('Orbit Determination Date', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Close Approach Date', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Neo Reference ID', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Name', axis=1)
+```
+
+```{python}
+nasa_trimmed = nasa_trimmed.drop('Est Dia in KM(max)', axis=1)
+```
+Dropping highly correlated columns to observe statistical significance.
+```{python}
+nasa_trimmed = nasa_trimmed.drop('Est Dia in M(max)', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Est Dia in Miles(max)', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Est Dia in Feet(max)', axis=1)
+
+nasa_trimmed = nasa_trimmed.drop('Est Dia in Feet(min)', axis=1)
+
+nasa_trimmed = nasa_trimmed.drop('Est Dia in Miles(min)', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Est Dia in M(min)', axis=1)
+
+
+numerical_cols = ['Epoch Date Close Approach',  'Miss Dist.(Astronomical)', 'Orbit ID', 'Minimum Orbit Intersection', 'Epoch Osculation', 'Asc Node Longitude', 'Perihelion Arg','Mean Anomaly', 'Mean Motion', 'Absolute Magnitude', 'Relative Velocity km per hr','Miles per hour', 'Orbit Uncertainity', 'Jupiter Tisserand Invariant', 'Eccentricity', 'Inclination', 'Orbital Period', 'Perihelion Distance', 'Aphelion Dist', 'Perihelion Time']
+
+```
+
+```{python}
+scaler = StandardScaler()
+nasa_trimmed[numerical_cols] = scaler.fit_transform(nasa_trimmed[numerical_cols])
+```
+
+```{python}
+import statsmodels.api as sm
+
+X = nasa_trimmed
+X = sm.add_constant(X)
+model = sm.Logit(y, X.astype(float)).fit()
+print(model.summary())
+```
+
+The model achieved a Pseudo R-squared of 0.7771, indicating a strong fit to the data. Key features like "Absolute Magnitude" and "Minimum Orbit Intersection" showed significant negative coefficients, suggesting they are important predictors of the target variable. The standard Errors are very high due to multicollinearity.
+
+VIF
+
+```{python}
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+```
+
+```{python}
+vif_data = pd.DataFrame()
+vif_data["feature"] = X.columns
+vif_data["VIF"] = [variance_inflation_factor(X.values, i) for i in range(len(X.columns))]
+
+print(vif_data)
+```
+
+The Variance Inflation Factor analysis reveals severe multicollinearity among several features, particularly those related to velocities and distances, with extremely high VIF values (up to 10^15). This multicollinearity can destabilize the model coefficients, making them unreliable.
+
+```{python}
+from sklearn.cluster import KMeans
+import mpl_toolkits.mplot3d
+
+kmeans = KMeans(n_clusters=2, random_state=0)  # Choose the number of clusters
+kmeans.fit(nasa_trimmed)
+cluster_labels = kmeans.labels_
+nasa_trimmed['Cluster'] = cluster_labels
+```
+
+## Clustering
+
+Clustering the first principal components and the second principal component demonstrates that the first component catches most of the variations in the data. Moreover, we are clustering the uncorrelated and the most important features in the dataset.
+
+```{python}
+url = f'https://raw.githubusercontent.com/navyaswe/Data-Science/main/nasa.csv'
+nasa_asteroids = pd.read_csv(url)
+
+
+nasa_trimmed = nasa_asteroids.drop_duplicates(ignore_index=True)
+len(nasa_trimmed)
+
+
+nasa_trimmed.fillna(method='ffill', inplace=True)
+nasa_trimmed = pd.get_dummies(nasa_trimmed, columns=['Orbiting Body'], drop_first=True)
+
+nasa_trimmed = pd.get_dummies(nasa_trimmed, columns=['Equinox'], drop_first=True)
+nasa_trimmed['Hazardous'] = nasa_trimmed['Hazardous'].astype(int)
+y = nasa_trimmed['Hazardous']
+nasa_trimmed = nasa_trimmed.drop('Hazardous', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Orbit Determination Date', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Close Approach Date', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Neo Reference ID', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Name', axis=1)
+
+numerical_cols = ['Est Dia in M(min)', 'Epoch Date Close Approach',  'Miss Dist.(Astronomical)', 'Orbit ID', 'Minimum Orbit Intersection', 'Epoch Osculation', 'Asc Node Longitude', 'Perihelion Arg','Mean Anomaly', 'Mean Motion', 'Absolute Magnitude', 'Relative Velocity km per hr','Miles per hour', 'Orbit Uncertainity', 'Jupiter Tisserand Invariant', 'Eccentricity', 'Inclination', 'Orbital Period', 'Perihelion Distance', 'Aphelion Dist', 'Perihelion Time']
+
+
+scaler = StandardScaler()
+nasa_trimmed[numerical_cols] = scaler.fit_transform(nasa_trimmed[numerical_cols])
+```
+
+```{python}
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+```
+```{python}
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(nasa_trimmed)
+
+plt.figure(figsize=(8, 6))
+plt.scatter(X_pca.iloc[:, 0], X_pca.iloc[:, 1], c=cluster_labels, cmap='viridis', marker='o', edgecolor='k')
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.title('K-means Clustering with 2 Principal Components')
+plt.colorbar()
+plt.show()
+```
+
+
+The plot reveals distinct clusters of asteroids, suggesting that the k-means algorithm identified groups of asteroids with similar features based on the two principal components. The number of clusters (indicated by the number of colors) was likely chosen based on the inherent structure in the data.
+
+The distribution of data points within and between clusters can also be informative. Tightly packed clusters suggest a higher degree of similarity within the group, while scattered clusters indicate more variation among the asteroids assigned to that cluster.
+
+3D clustering
+
+```{python}
+url = f'https://raw.githubusercontent.com/navyaswe/Data-Science/main/nasa.csv'
+nasa_asteroids = pd.read_csv(url)
+
+
+nasa_trimmed = nasa_asteroids.drop_duplicates(ignore_index=True)
+len(nasa_trimmed)
+
+
+nasa_trimmed.fillna(method='ffill', inplace=True)
+nasa_trimmed = pd.get_dummies(nasa_trimmed, columns=['Orbiting Body'], drop_first=True)
+
+nasa_trimmed = pd.get_dummies(nasa_trimmed, columns=['Equinox'], drop_first=True)
+
+nasa_trimmed = nasa_trimmed.drop('Orbit Determination Date', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Close Approach Date', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Neo Reference ID', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Name', axis=1)
+
+numerical_cols = ['Est Dia in M(min)', 'Epoch Date Close Approach',  'Miss Dist.(Astronomical)', 'Orbit ID', 'Minimum Orbit Intersection', 'Epoch Osculation', 'Asc Node Longitude', 'Perihelion Arg','Mean Anomaly', 'Mean Motion', 'Absolute Magnitude', 'Relative Velocity km per hr','Miles per hour', 'Orbit Uncertainity', 'Jupiter Tisserand Invariant', 'Eccentricity', 'Inclination', 'Orbital Period', 'Perihelion Distance', 'Aphelion Dist', 'Perihelion Time']
+
+
+scaler = StandardScaler()
+nasa_trimmed[numerical_cols] = scaler.fit_transform(nasa_trimmed[numerical_cols])
+```
+
+```{python}
+selected_attributes = ['Absolute Magnitude', 'Mean Motion', 'Relative Velocity km per sec']
+```
+
+```{python}
+X_selected = nasa_trimmed[selected_attributes]
+```
+
+```{python}
+estimators = [
+    ("k_means_2_clusters", KMeans(n_clusters=2, random_state=5)),
+    ("k_means_3_clusters", KMeans(n_clusters=3, random_state=5)),
+    ("k_means_4_clusters", KMeans(n_clusters=4, random_state=5))
+
+]
+```
+
+```{python}
+fig = plt.figure(figsize=(18, 12))
+titles = ["2 clusters", "3 clusters", "4 clusters"]
+
+for idx, ((name, est), title) in enumerate(zip(estimators, titles)):
+    ax = fig.add_subplot(2, 2, idx + 1, projection="3d", elev=48, azim=134)
+    est.fit(X_selected)
+    labels = est.labels_
+    cluster_centers = est.cluster_centers_
+
+    scatter = ax.scatter(
+        X_selected.iloc[:, 0],
+        X_selected.iloc[:, 2],
+        X_selected.iloc[:, 1],
+        c=labels.astype(float),
+        edgecolor="k",
+        s=20,
+        alpha=0.7
+    )
+    ax.scatter(
+        cluster_centers[:, 0],
+        cluster_centers[:, 2],
+        cluster_centers[:, 1],
+        c='red',
+        marker='X',
+        s=100,  # Marker size for cluster centers
+        alpha=1,  # Transparency
+        edgecolor="k"
+    )
+    ax.set_xlabel(selected_attributes[0])
+    ax.set_ylabel(selected_attributes[1])
+    ax.set_zlabel(selected_attributes[2])
+    ax.set_title(title)
+
+plt.subplots_adjust(wspace=0.25, hspace=0.25)
+plt.show()
+```
+
+
+
+Each subplot shows a 3D scatter plot where the axes represent three selected features (Absolute Magnitude, Mean Motion, Relative Velocity km per sec) of the asteroids.
+
+Number of Clusters: The plots depict the results for two, three, and four clusters (indicated by the subplot titles). The choice of the number of clusters can significantly impact the clustering outcome and should be determined based on the data's inherent structure or the analysis goals.
+
+Tight and spherical clusters suggest a high degree of similarity within the group on the chosen features. Elongated or spread-out clusters indicate more variation among the asteroids assigned to that cluster.
+
+
+```{python}
+selected_attributes = ['Absolute Magnitude', 'Mean Motion', 'Jupiter Tisserand Invariant']
+X_selected = nasa_trimmed[selected_attributes]
+estimators = [
+    ("k_means_2_clusters", KMeans(n_clusters=2, random_state=5)),
+    ("k_means_3_clusters", KMeans(n_clusters=3, random_state=5)),
+    ("k_means_4_clusters", KMeans(n_clusters=4, random_state=5))
+
+]
+```
+```{python}
+fig = plt.figure(figsize=(18, 12))
+titles = ["2 clusters", "3 clusters", "4 clusters"]
+
+for idx, ((name, est), title) in enumerate(zip(estimators, titles)):
+    ax = fig.add_subplot(2, 2, idx + 1, projection="3d", elev=48, azim=134)
+    est.fit(X_selected)
+    labels = est.labels_
+    labels = est.labels_
+    cluster_centers = est.cluster_centers_
+
+
+    scatter = ax.scatter(
+        X_selected.iloc[:, 0],
+        X_selected.iloc[:, 2],
+        X_selected.iloc[:, 1],
+        c=labels.astype(float),
+        edgecolor="k",
+        s=20,  #Marker size
+        alpha=0.7  #Transparency
+    )
+    ax.scatter(
+        cluster_centers[:, 0],
+        cluster_centers[:, 2],
+        cluster_centers[:, 1],
+        c='red',
+        marker='X',
+        s=100,  # Marker size for cluster centers
+        alpha=1,  # Transparency
+        edgecolor="k"
+    )
+
+    ax.set_xlabel(selected_attributes[0])
+    ax.set_ylabel(selected_attributes[1])
+    ax.set_zlabel(selected_attributes[2])
+    ax.set_title(title)
+
+plt.subplots_adjust(wspace=0.25, hspace=0.25)
+plt.show()
+```
+
+```{python}
+selected_attributes = ['Minimum Orbit Intersection', 'Mean Motion', 'Jupiter Tisserand Invariant']
+X_selected = nasa_trimmed[selected_attributes]
+estimators = [
+    ("k_means_2_clusters", KMeans(n_clusters=2, random_state=5)),
+    ("k_means_3_clusters", KMeans(n_clusters=3, random_state=5)),
+    ("k_means_4_clusters", KMeans(n_clusters=4, random_state=5))
+
+]
+```
+
+```{python}
+fig = plt.figure(figsize=(18, 12))
+titles = ["2 clusters", "3 clusters", "4 clusters"]
+
+for idx, ((name, est), title) in enumerate(zip(estimators, titles)):
+    ax = fig.add_subplot(2, 2, idx + 1, projection="3d", elev=48, azim=134)
+    est.fit(X_selected)
+    labels = est.labels_
+
+    # Scatter plot with reduced marker size and added transparency
+    scatter = ax.scatter(
+        X_selected.iloc[:, 0],
+        X_selected.iloc[:, 2],
+        X_selected.iloc[:, 1],
+        c=labels.astype(float),
+        edgecolor="k",
+        s=20,  # Marker size
+        alpha=0.7  # Transparency
+    )
+
+    ax.set_xlabel(selected_attributes[0])
+    ax.set_ylabel(selected_attributes[1])
+    ax.set_zlabel(selected_attributes[2])
+    ax.set_title(title)
+
+plt.subplots_adjust(wspace=0.25, hspace=0.25)
+plt.show()
+
+
+plt.subplots_adjust(wspace=0.25, hspace=0.25)
+plt.show()
+```
+
+```{python}
+selected_attributes = ['Minimum Orbit Intersection', 'Orbit Uncertainity', 'Jupiter Tisserand Invariant']
+X_selected = nasa_trimmed[selected_attributes]
+estimators = [
+    ("k_means_2_clusters", KMeans(n_clusters=2, random_state=5)),
+    ("k_means_3_clusters", KMeans(n_clusters=3, random_state=5)),
+    ("k_means_4_clusters", KMeans(n_clusters=4, random_state=5))
+
+]
+fig = plt.figure(figsize=(18, 12))
+titles = ["2 clusters", "3 clusters", "4 clusters"]
+
+for idx, ((name, est), title) in enumerate(zip(estimators, titles)):
+    ax = fig.add_subplot(2, 2, idx + 1, projection="3d", elev=48, azim=134)
+    est.fit(X_selected)
+    labels = est.labels_
+
+
+    scatter = ax.scatter(
+        X_selected.iloc[:, 0],
+        X_selected.iloc[:, 2],
+        X_selected.iloc[:, 1],
+        c=labels.astype(float),
+        edgecolor="k",
+        s=20,  #Marker size
+        alpha=0.7  #Transparency
+    )
+
+    ax.set_xlabel(selected_attributes[0])
+    ax.set_ylabel(selected_attributes[1])
+    ax.set_zlabel(selected_attributes[2])
+    ax.set_title(title)
+
+plt.subplots_adjust(wspace=0.25, hspace=0.25)
+plt.show()
+```
+
+```{python}
+url = f'https://raw.githubusercontent.com/navyaswe/Data-Science/main/nasa.csv'
+nasa_asteroids = pd.read_csv(url)
+
+
+nasa_trimmed = nasa_asteroids.drop_duplicates(ignore_index=True)
+len(nasa_trimmed)
+
+
+nasa_trimmed.fillna(method='ffill', inplace=True)
+nasa_trimmed = pd.get_dummies(nasa_trimmed, columns=['Orbiting Body'], drop_first=True)
+
+nasa_trimmed = pd.get_dummies(nasa_trimmed, columns=['Equinox'], drop_first=True)
+
+nasa_trimmed = nasa_trimmed.drop('Orbit Determination Date', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Close Approach Date', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Neo Reference ID', axis=1)
+nasa_trimmed = nasa_trimmed.drop('Name', axis=1)
+
+numerical_cols = ['Est Dia in M(min)', 'Epoch Date Close Approach',  'Miss Dist.(Astronomical)', 'Orbit ID', 'Minimum Orbit Intersection', 'Epoch Osculation', 'Asc Node Longitude', 'Perihelion Arg','Mean Anomaly', 'Mean Motion', 'Absolute Magnitude', 'Relative Velocity km per hr','Miles per hour', 'Orbit Uncertainity', 'Jupiter Tisserand Invariant', 'Eccentricity', 'Inclination', 'Orbital Period', 'Perihelion Distance', 'Aphelion Dist', 'Perihelion Time']
+
+
+scaler = StandardScaler()
+nasa_trimmed[numerical_cols] = scaler.fit_transform(nasa_trimmed[numerical_cols])
+```
+
+```{python}
+selected_attributes = ['Absolute Magnitude', 'Minimum Orbit Intersection']
+X_selected = nasa_trimmed[selected_attributes]
+```
+
+
+```{python}
+kmeans = KMeans(n_clusters=2, random_state=5)
+kmeans.fit(X_selected)
+
+
+cluster_labels = kmeans.labels_
+cluster_centres = kmeans.cluster_centers_
+
+
+X_selected['Cluster'] = cluster_labels
+```
+
+
+```{python}
+plt.figure(figsize=(10, 8))
+plt.scatter(X_selected.iloc[:, 0], X_selected.iloc[:, 1], c=cluster_labels, cmap='viridis', edgecolor='k')
+plt.scatter(cluster_centres[:, 0], cluster_centres[:, 1], c='red', marker='X', s=100, edgecolor='k')
+plt.xlabel(selected_attributes[0])
+plt.ylabel(selected_attributes[1])
+plt.title('K-means Clustering with 2 Attributes')
+plt.colorbar(label='Cluster')
+plt.show()
+```
+2D clusters
+
+```{python}
+selected_attributes = ['Mean Motion', 'Minimum Orbit Intersection']
+X_selected = nasa_trimmed[selected_attributes]
+```
+
+```{python}
+kmeans = KMeans(n_clusters=2, random_state=5)
+kmeans.fit(X_selected)
+
+cluster_labels = kmeans.labels_
+cluster_centres = kmeans.cluster_centers_
+
+
+X_selected['Cluster'] = cluster_labels
+```
+
+```{python}
+
+```
+
+```{python}
+plt.figure(figsize=(10, 8))
+plt.scatter(X_selected.iloc[:, 0], X_selected.iloc[:, 1], c=cluster_labels, cmap='viridis', edgecolor='k')
+plt.scatter(cluster_centres[:, 0], cluster_centres[:, 1], c='red', marker='X', s=100, edgecolor='k')
+plt.xlabel(selected_attributes[0])
+plt.ylabel(selected_attributes[1])
+plt.title('K-means Clustering with 2 Attributes')
+plt.colorbar(label='Cluster')
+plt.show()
+```
+
+```{python}
+selected_attributes = ['Mean Motion', 'Absolute Magnitude']
+X_selected = nasa_trimmed[selected_attributes]
+```
+
+```{python}
+kmeans = KMeans(n_clusters=2, random_state=5)
+kmeans.fit(X_selected)
+
+cluster_labels = kmeans.labels_
+cluster_centres = kmeans.cluster_centers_
+
+X_selected['Cluster'] = cluster_labels
+```
+
+```{python}
+plt.figure(figsize=(10, 8))
+plt.scatter(X_selected.iloc[:, 0], X_selected.iloc[:, 1], c=cluster_labels, cmap='viridis', edgecolor='k')
+plt.scatter(cluster_centres[:, 0], cluster_centres[:, 1], c='red', marker='X', s=100, edgecolor='k')
+plt.xlabel(selected_attributes[0])
+plt.ylabel(selected_attributes[1])
+plt.title('K-means Clustering with 2 Attributes')
+plt.colorbar(label='Cluster')
+plt.show()
+```
+
+
+# NASA JPL Dataset
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+import seaborn as sns
+from sklearn.impute import KNNImputer
+```
+
+```{python}
+!pip install -U --no-cache-dir gdown --pre
+```
+
+```{python}
+!gdown --no-cookies 1M0r0CisgxD4ly7tO4DpUCwR9xk0SXMTg
+```
+
+```{python}
+!tar -xf Asteroid.csv.tar.xz
+```
+
+```{python}
+df = pd.read_csv(r'Asteroid.csv')
+```
+
+```{python}
+missing_values = df.isnull().sum()
+columns_with_missing_data = missing_values[missing_values > 0]
+```
+
+```{python}
+df.head(4)
+```
+
+```{python}
+df['spec_B'].unique()
+```
+
+```{python}
+df['spec_T'].unique()
+```
+
+```{python}
+#print(missing_values)
+print(columns_with_missing_data)
+```
+
+```{python}
+print(missing_values)
+```
+
+```{python}
+low_percentage_missing_cols = ['full_name', 'G', 'w', 'H', 'extent', 'albedo', 'rot_per','GM','BV','UB','IR','spec_B','spec_T']
+```
+
+```{python}
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+```
+
+```{python}
+df['diameter'].notnull().sum()
+dataset = df.dropna(axis=0,subset=['diameter'])
+len (dataset)
+```
+
+```{python}
+dataset.drop(low_percentage_missing_cols,axis=1,inplace=True)
+len(dataset.columns)
+```
+Correcting all the datatypes
+
+```{python}
+dataset.at[15,'diameter']=226
+dataset['diameter']=pd.to_numeric(dataset['diameter'])
+```
+
+```{python}
+dataset['condition_code']=dataset['condition_code'].astype('int')
+dataset['condition_code'].unique()
+```
+Correlation Plot
+
+```{python}
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+#Exclude non-numeric columns by selecting only numeric columns
+numeric_dataset = dataset.select_dtypes(include=[float, int])
+
+#Compute correlation matrix
+correlation_matrix = numeric_dataset.corr()
+
+#Plot the heatmap
+plt.figure(figsize=(20, 10))
+sns.set(font_scale=1.4)
+sns.heatmap(correlation_matrix, annot=True, cmap='inferno', fmt='.2f', annot_kws={'size': 16})
+plt.show()
+
+```
+Since the condition_code column does not show a significant correlation with other predictors, we can consider removing this column from the model to simplify it.
+```{python}
+#dropping condition_code
+dataset=dataset.drop(columns='condition_code')
+```
+
+```{python}
+columns_to_encode = ['neo', 'pha']
+
+# One-hot encode
+encoded_columns = pd.get_dummies(dataset[columns_to_encode])
+dataset = dataset.drop(columns_to_encode, axis=1)
+
+# Concatenate the encoded columns with the dataset
+dataset_encoded = pd.concat([dataset, encoded_columns], axis=1)
+print(dataset_encoded.head())
+```
+
+```{python}
+dataset_encoded.head()
+```
+
+```{python}
+standard_scaler = StandardScaler()
+dataset=standard_scaler.fit_transform(dataset_encoded)
+dataset_encoded.head()
+```
+
+```{python}
+missing_values = dataset_encoded.isnull().sum()
+missing_values
+```
+
+```{python}
+imputer = KNNImputer(n_neighbors=3)
+df_imputed = pd.DataFrame(imputer.fit_transform(dataset_encoded), columns=dataset_encoded.columns)
+```
+
+```{python}
+#scaling
+response=df_imputed['diameter']
+dataset=df_imputed.drop(columns='diameter')
+```
+
+```{python}
+X_train,X_test,Y_train,Y_test=train_test_split(dataset,response,test_size=0.2,random_state=42)
+```
+
+```{python}
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
+```
+
+```{python}
+model=LinearRegression()
+model.fit(X_train,Y_train)
+```
+
+```{python}
+prediction=model.predict(X_test)
+```
+
+```{python}
+mse=mean_squared_error(Y_test,prediction)
+rmse=np.sqrt(mse)
+print("rmse:"+str(rmse))
+r2=r2_score(Y_test,prediction)
+print("Rsquared",r2)
+```
+
+```{python}
+import statsmodels.api as sm
+from scipy.stats import norm
+```
+
+```{python}
+X_train = sm.add_constant(X_train)
+```
+
+
+```{python}
+model = sm.OLS(Y_train, X_train).fit()
+```
+
+```{python}
+print(model.summary())
+```
+
+```{python}
+X_train,X_test,Y_train,Y_test=train_test_split(dataset,response,test_size=0.2,random_state=42)
+```
+
+
+Double-click (or enter) to edit
+
+Ridge Regression to solve multicollinearity problems
+```{python}
+from sklearn.linear_model import Ridge
+model = Ridge(alpha=0.6)
+model.fit(X_train, Y_train)
+predictions = model.predict(X_test)
+```
+
+```{python}
+n_obs = len(Y_train)
+n_features = X_train.shape[1]
+
+#Residual standard error
+residuals = Y_train - model.predict(X_train)
+residual_std = np.sqrt(np.sum(residuals ** 2) / (n_obs - n_features - 1))
+
+#Standard errors of coefficients
+se = np.sqrt(np.diag(np.linalg.inv(X_train.T @ X_train) * residual_std**2))
+
+#Coefficients and Intercept
+coefficients = model.coef_
+intercept = model.intercept_
+
+#Z-statistics
+z_stats = coefficients / se
+
+#Approximate p-values
+p_values = [2 * (1 - norm.cdf(np.abs(z))) for z in z_stats]
+
+#Get feature names
+feature_names = X_train.columns if isinstance(X_train, pd.DataFrame) else range(X_train.shape[1])
+
+#Create DataFrame to store coefficients, standard errors, z-statistics, and p-values
+results_df = pd.DataFrame({
+    'Feature': ['Intercept'] + list(feature_names),
+    'Coefficient': [intercept] + list(coefficients),
+    'Standard Error': [np.nan] + list(se),
+    'Z-statistic': [np.nan] + list(z_stats),
+    'P-value': [np.nan] + list(p_values)
+})
+```
+
+
+Analysis:
+
+After applying Ridge Regression, we observe that statistical significance of the predictors  are not entirely reflected because, and and the standard errors did not improve.. This suggests potential issues with the model or the need for further adjustments. Therefore, in this specific case, Ridge Regression does not appear to be the most helpful approach.
+
+
+```{python}
+print(results_df)
+```
+
+Scatter Plots for Attributes
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+e = dataset['e']  # Eccentricity
+i = dataset['i']  # Inclination
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=e, y=i)
+plt.xlabel('Eccentricity (e)')
+plt.ylabel('Inclination (i)')
+plt.title('Scatter Plot of Eccentricity vs Inclination')
+plt.grid(True)
+plt.show()
+
+```
+Analysis:
+
+The scatter plot of eccentricity vs inclination shows that most asteroids have low eccentricity and also low inclination. There is no strong linear relationship between the two variables, and this plot highlights some outliers with high inclination values.
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+om = dataset['om']  # longitude_asc_node
+q = dataset['q'] # argument_perihelion/perihelion_dist
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=om, y=q)
+plt.xlabel('ongitude_asc_node (om)')
+plt.ylabel('argument_perihelion/perihelion_dist (q)')
+plt.title('Scatter Plot of om vs q')
+plt.grid(True)
+plt.show()
+
+```
+Analysis:
+
+The scatter plot of the longitude of the ascending node vs the argument of perihelion/perihelion distance shows that most asteroids have low q values, implying that their orbits bring them close to the Sun. There is again no strong correlation between om and q, and several outliers with high q values are present.
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Assuming nasa_features is your dataframe
+ad = dataset['ad']  # aphelion_dist
+q = dataset['q']  # argument_perihelion/perihelion_dist
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=ad, y=q)
+plt.xlabel('aphelion_dist(ad)')
+plt.ylabel('argument_perihelion/perihelion_dist(q)')
+plt.title('Scatter Plot of ad vs q')
+plt.grid(True)
+plt.show()
+```
+Analysis:
+
+The scatter plot of aphelion distance vs argument of perihelion/perihelion distance shows that most asteroids have low ad and q values, implying that their orbits keep them relatively close to the Sun. There is again no strong correlation between ad and q, and several outliers with high ad and q values are present.
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Assuming nasa_features is your dataframe
+om = dataset['om']  # longitude_asc_node
+diameter = response  # diameter
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=om, y=diameter)
+plt.xlabel('longitude_asc_node(om)')
+plt.ylabel('diameter')
+plt.title('Scatter Plot of om vs diameter')
+plt.grid(True)
+plt.show()
+
+```
+Analysis:
+
+The scatter plot of the longitude of the ascending node vs diameter shows that most asteroids have small diameters, with no strong correlation between om and diameter. Several outliers with significantly larger diameters are present.
+
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Assuming nasa_features is your dataframe
+ad = dataset['ad']   # aphelion_dist
+diameter = response  # diameter
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=ad, y=diameter)
+plt.xlabel('aphelion_dist(ad)')
+plt.ylabel('diameter')
+plt.title('Scatter Plot of ad vs diameter')
+plt.grid(True)
+plt.show()
+
+```
+
+Analysis:
+
+The scatter plot of aphelion distance vs diameter shows that most asteroids have small diameters and small aphelion distances, with no strong correlation between ad and diameter. Several outliers with significantly larger ad and diameter values are present.
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Assuming nasa_features is your dataframe
+e = dataset['e']  # Eccentricity
+diameter = response  # diameter
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=e, y=diameter)
+plt.xlabel('Eccentricity (e)')
+plt.ylabel('diameter')
+plt.title('Scatter Plot of e vs diameter')
+plt.grid(True)
+plt.show()
+
+```
+Analysis:
+
+The scatter plot of eccentricity vs diameter shows that most asteroids have small diameters and low eccentricities, with a slight negative correlation between e and diameter. Several outliers with significantly larger diameters are present.
+Summary:
+
+In conclusion, the scatter plots suggest that the attributes do not have strong pairwise correlations, indicating that the relationships between these variables may be complex.
+Conclusions/Answers to the Research Questions:
+
+    How can correlation and regression analysis be applied to explore relationships and predict key characteristics across various classes and features of asteroids, including size, albedo, and orbital properties? Additionally, what methods can be employed to identify outliers and anomalies within these data?
+    Ans:
+
+    Investigate two classification tasks/prediction tasks: • Predicting Hazardous, Non-Hazardous • Predicting the Diameter of the celestial object
+    Ans:
+    We have completed the classification and prediction tasks as follows:
+    Predicting Hazardous/Non-Hazardous
+    Models Used: We employed Logistic Regression, K-Nearest Neighbors (KNN), Artificial Neural Networks (ANN), XGBoost, Random Forest, and Support Vector Machine (SVM).
+    Evaluation Metrics: We evaluated the models using accuracy, precision, recall, F1 score, and AUC (Area Under the ROC Curve).
+    Visualization: We provided visualization plots, such as ROC curves and confusion matrices, to illustrate the model performance and the relationships between features and the target variable.
+    Predicting the Diameter of the Celestial Object
+    Models Used: We used Linear Regression and Ridge Regression for this task.
+    Evaluation Metrics: We assessed the models using metrics such as Mean Absolute Error (MAE), Mean Squared Error (MSE), and R-squared (R²).
+    Statistical Relationships: We provided statistical analysis to show the relationships between the diameter and other features, such as scatter plots and regression coefficients.
+    By utilizing these methods, we ensured comprehensive analysis and accurate predictions for both classification and regression tasks.
+
+    Compare the effectiveness of different classification models. Which models do well in predicting diameter or classifying hazardous bodies?
+    Ans:
+    Classifying Hazardous Bodies
+    Best Models: Random Forest and XGBoost both demonstrated outstanding performance in classifying hazardous and non-hazardous asteroids. These models achieved high accuracy, precision, recall, F1 scores, and AUC values, indicating their effectiveness in this classification task.
+    Predicting Diameter
+    Best Model: Linear Regression performed well in predicting the diameter of celestial objects. However, adding Ridge Regression did not significantly improve the predictive performance based on the statistical metrics obtained.
+
+    Evaluate and assess decision boundaries of classification tasks.
+    Ans:
+
+Impact:
+
+Improved Hazard Classification: By employing Random Forests, our study significantly enhances the accuracy of hazard classification for asteroids approaching Earth. This model outperformed others in accurately distinguishing between hazardous and non-hazardous asteroids based on a comprehensive set of features such as relative velocity, orbit uncertainty, and minimum orbit intersection. This capability provides critical insights for planetary defense efforts, enabling more precise identification and prioritization of potential threats.
+
+Enhanced Diameter Prediction: Utilizing linear regression and Ridge Regression models, we achieved moderate success in predicting asteroid diameters based on fundamental orbital parameters like semi-major axis and eccentricity. The linear regression model explained 42.9% of the variance in asteroid diameters, indicating a reasonable fit to the data. However, the application of Ridge Regression revealed challenges, including the loss of statistical significance in some predictors and issues with model stability, highlighted by NaN values in key metrics. These findings underscore the complexities involved in predicting asteroid sizes accurately and suggest avenues for further refinement in modeling approaches.
+
+
+
+`
